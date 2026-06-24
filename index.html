@@ -1,46 +1,218 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Power BI Dashboard</title>
+  <title>Racing New NE Monitoring Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      font-family: "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-      background-image: url('https://i.imgur.com/z4IGkzy.jpeg'); /* Replace with your image */
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      background-image: url('https://i.imgur.com/z4IGkzy.jpeg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      color: #fff;
-
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 36px 24px 28px;
     }
 
-    h1 {
-      font-size: 2em;
+    /* Dark overlay so text always contrasts */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(5,10,24,0.72) 0%, rgba(10,20,50,0.60) 100%);
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1440px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 28px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .logo-mark {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: #1a56db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-mark svg {
+      width: 26px;
+      height: 26px;
+      fill: #ffffff;
+    }
+
+    .header-text h1 {
+      font-family: 'Barlow Condensed', 'Inter', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .header-text .subtitle {
+      margin-top: 4px;
+      font-size: 0.78rem;
       font-weight: 600;
-      margin-bottom: 5px;
-      color: #333;
-    }
-	
-	.subtitle {
-      font-size: 1.2em;
-      font-weight: 400;
-      margin-bottom: 30px;
-      color: #555;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #fb923c;
     }
 
-	
-    iframe {
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .badge-live {
+      background: rgba(34,197,94,0.15);
+      color: #4ade80;
+      border: 1px solid rgba(74,222,128,0.3);
+    }
+
+    .badge-period {
+      background: rgba(96,165,250,0.12);
+      color: #93c5fd;
+      border: 1px solid rgba(147,197,253,0.25);
+    }
+
+    /* ── Dashboard frame ── */
+    .dashboard-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 14px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .iframe-ratio {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+    }
+
+    .iframe-ratio iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
       border: none;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: block;
+    }
+
+    /* ── Footer ── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .footer-left {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-right {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      body { padding: 16px 12px 20px; }
+      header { flex-direction: column; align-items: flex-start; padding: 16px 18px; gap: 12px; }
+      .header-text h1 { font-size: 1.25rem; }
+      .header-right { flex-wrap: wrap; }
     }
   </style>
 </head>
 <body>
-  <h1>Racing New NE Monitoring Dashboard</h1>
-  <div class="subtitle">NBAD SUMBAGSEL H1 2026</div>
-  <iframe title="Report Racing_backup_080626" width="600" height="373.5" src="https://app.powerbi.com/view?r=eyJrIjoiOWEyY2YzYmQtNzgxNi00NTg3LWFiZmYtODMxYzJiOTYyYjVjIiwidCI6ImZjNzQzMDc1LTkzZWQtNGE1Yy04MmMwLWNhNWVhYzkxNDIyMCIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>
+  <div class="page">
+
+    <header>
+      <div class="header-left">
+        <div class="logo-mark">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 12l2-2 4 4 8-8 2 2-10 10z"/>
+          </svg>
+        </div>
+        <div class="header-text">
+          <h1>Racing New NE Monitoring Dashboard</h1>
+          <div class="subtitle">NBAD &nbsp;·&nbsp; SUMBAGSEL &nbsp;·&nbsp; H1 2026</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="badge badge-live">&#9679; Live</span>
+        <span class="badge badge-period">H1 2026</span>
+      </div>
+    </header>
+
+    <div class="dashboard-card">
+      <div class="iframe-ratio">
+        <iframe
+          title="Report Racing_backup_080626"
+          src="https://app.powerbi.com/view?r=eyJrIjoiOWEyY2YzYmQtNzgxNi00NTg3LWFiZmYtODMxYzJiOTYyYjVjIiwidCI6ImZjNzQzMDc1LTkzZWQtNGE1Yy04MmMwLWNhNWVhYzkxNDIyMCIsImMiOjEwfQ%3D%3D"
+          frameborder="0"
+          allowFullScreen="true">
+        </iframe>
+      </div>
+    </div>
+
+    <footer>
+      <span class="footer-left">Powered by Microsoft Power BI &nbsp;·&nbsp; Data refreshes on schedule</span>
+      <span class="footer-right">NBAD Sumbagsel Region &copy; 2026</span>
+    </footer>
+
+  </div>
 </body>
 </html>
-
